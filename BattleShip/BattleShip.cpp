@@ -1,12 +1,16 @@
-// BattleShip.cpp : 콘솔 응용 프로그램에 대한 진입점을 정의합니다.
-//
-
 #include "stdafx.h"
+#include "Battleship.h"
 
 
-int _tmain(int argc, _TCHAR* argv[])
+Battleship::Battleship()
 {
-	return 0;
+	m_Type = EShip::BATTLESHIP;
+	m_Hp = 4;
+	m_Position = new Point[m_Hp];
+	m_Name = "Battleship";
 }
 
-	
+Battleship::~Battleship()
+{
+
+}
