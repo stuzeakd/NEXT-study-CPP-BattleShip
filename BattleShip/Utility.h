@@ -3,7 +3,7 @@
 class Utility
 {
 public:
-	static Utility* Instance();
+	static Utility& Instance();
 	~Utility();
 private:
 	Utility();
@@ -12,12 +12,14 @@ protected:
 	static Utility* m_Instance;
 
 public:
-	Point RCToPoint(std::string &rc);
+	std::string GetInput(void);
+	Point StringToPoint(std::string &rc);
 	bool IsValidRC(std::string &rc);
 	bool IsValidLowerRow(char c);
 	bool IsValidUpperRow(char c);
 	bool IsValidNumCol(char c);
-
-
+	char Utility::LowerToUpper(char c);
+	char RowOfPoint(Point pos);
+	char ColOfPoint(Point pos);
 };
 

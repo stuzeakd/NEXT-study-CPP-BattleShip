@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <conio.h>
 #include "common.h"
+
 //Singleton Class
 
 struct ColorSet
@@ -20,10 +21,11 @@ protected:
 	ConsoleControl();
 
 public:
+	void SetWindowSize(int width, int height);
 	void Gotoxy(int x, int y);
 	void Gotoxy(Point pos);
-	void Setcolor(int color, int bgcolor);
-//	void Setcolor(ColorSet consoleColor);
+	void SetColor(int color, int bgcolor);
+	void SetColor(ColorSet consoleColor);
 	int CursorPosVerti(std::string cursor, Point stdPos, int range, int interval, int state);
 	void Clear();
 

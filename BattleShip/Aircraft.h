@@ -6,5 +6,7 @@ class Aircraft :
 public:
 	Aircraft();
 	~Aircraft();
+
+	int GetLength(){ return 5; }
 };
 

@@ -22,19 +22,35 @@ void ConsoleControl::Gotoxy(int x, int y)
 	COORD pos = { x, y };
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
+void ConsoleControl::SetWindowSize(int width, int height)
+{
+	//SMALL_RECT r = { 0, 0, width - 1, height - 1 };
+	//COORD      c;
+	//HANDLE hConOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	////#include <limits>
+	////#include <stdexcept>
+	////if (!GetConsoleScreenBufferInfo(hConOut, &csbi))
+	////	throw runtime_error("You must be attached to a human.");
+	//c.X = width;
+	//c.Y = height;
+	//SetConsoleScreenBufferSize(hConOut, c);
+	//SetConsoleWindowInfo(hConOut, TRUE, &r);
+	//printf("!!!!!!!!!!!!!!");
+
+}
 void ConsoleControl::Gotoxy(Point pos)
 {
 	Gotoxy(pos.GetX(), pos.GetY());
 }
-void ConsoleControl::Setcolor(int color, int bgcolor)
+void ConsoleControl::SetColor(int color, int bgcolor)
 {
 	color &= 0xf;
 	bgcolor &= 0xf;
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (bgcolor << 4) | color);
 }
-//void ConsoleControl::Setcolor(ColorSet consoleColor){
-//	Setcolor(consoleColor.m_FontColor, consoleColor.m_BackColor);
-//}
+void ConsoleControl::SetColor(ColorSet consoleColor){
+	SetColor(consoleColor.m_FontColor, consoleColor.m_BackColor);
+}
 
 void ConsoleControl::Clear(){
 	system("cls");
@@ -51,7 +67,7 @@ int ConsoleControl::CursorPosVerti(std::string cursor, Point stdPos, int range ,
 			ch = _getch();
 		}
 		if (ch == 72 || ch == 80){
-			Gotoxy(pos);
+			Gotoxy(pos);		
 			printf("  ");
 		}
 		if (ch == 72 && pos.GetY() > stdPos.GetY()){

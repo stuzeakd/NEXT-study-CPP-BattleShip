@@ -16,13 +16,21 @@ class Tile :
 public:
 	Tile();
 	~Tile();
+	Tile(const Tile & src);
 
 public:
 	void Draw();
 	void SetPoint(int x, int y);
+	void SetTileState(ETile::State state);
+	void SetShipType(EShip::Type type);
+	EShip::Type		GetShipType()	{ return m_ShipType; }
+	ETile::State	GetTileState()	{ return m_TileState; }
+	int				GetShipID()		{ return m_ShipId; }
+
 private:
-	EShip::Type shipType;
-	ETile::State tileState; //none, miss, hit, destroy,
+	int m_ShipId;
+	EShip::Type m_ShipType;
+	ETile::State m_TileState; //none, miss, hit, destroy,
 };
 
 

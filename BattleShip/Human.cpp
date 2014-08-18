@@ -19,7 +19,7 @@ void Human::PrintEnemyMap(){
 }
 void Human::SetupShips(){
 	Point pos;
-	for (std::vector<Ship*>::iterator IterPos = m_Ships.begin(); IterPos != m_Ships.end(); ++IterPos){
+	for (std::vector<Ship*>::iterator IterPos = m_MyShips.begin(); IterPos != m_MyShips.end(); ++IterPos){
 		std::cout << (*IterPos)->GetName();
 		while (!((*IterPos)->IsFinishToAddPos())){
 			pos = MakeShipPos();

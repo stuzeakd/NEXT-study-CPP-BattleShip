@@ -99,6 +99,9 @@
     <ClInclude Include="GameUIIngame.h">
       <Filter>헤더 파일\System</Filter>
     </ClInclude>
+    <ClInclude Include="Messages.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -159,7 +162,10 @@
       <Filter>소스 파일\System</Filter>
     </ClCompile>
     <ClCompile Include="GameUIIngame.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Messages.cpp">
+      <Filter>소스 파일\System</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

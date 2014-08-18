@@ -19,7 +19,7 @@ protected:
 	ShipFactory();
 
 public:
-	Ship* GenerateShip(EShip::Type shipType);
+	Ship* GenerateShip(EShip::Type shipType, int id);
 private:
 	static ShipFactory* m_Instance;
 };

@@ -4,18 +4,27 @@
 
 Tile::Tile()
 {
-	shipType = EShip::NONE;
-	tileState = ETile::NONE;
+	m_ShipType = EShip::NONE;
+	m_TileState = ETile::NONE;
+	m_ShipId = -1;
 }
 
 
 Tile::~Tile()
 {
 }
+Tile::Tile(const Tile & src)
+{
+	m_ShipType = src.m_ShipType;
+	m_ShipId = src.m_ShipId;
+	m_TileState = src.m_TileState;
+	SetX(src.GetX());
+	SetY(src.GetY());
+}
 
 void Tile::Draw()
 {
-	switch (shipType)
+	switch (m_ShipType)
 	{
 	case EShip::NONE:
 		printf_s("N");
@@ -38,7 +47,7 @@ void Tile::Draw()
 	default:
 		break;
 	}
-	switch (tileState)
+	switch (m_TileState)
 	{
 	case ETile::NONE:
 		printf_s("N");
@@ -60,4 +69,12 @@ void Tile::Draw()
 void Tile::SetPoint(int x, int y){
 	SetX(x);
 	SetY(y);
+}
+void Tile::SetTileState(ETile::State state)
+{
+	m_TileState = state;
+}
+void Tile::SetShipType(EShip::Type type)
+{
+	m_ShipType = type;
 }

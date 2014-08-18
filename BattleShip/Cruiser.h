@@ -6,5 +6,8 @@ class Cruiser :
 public:
 	Cruiser();
 	~Cruiser();
+
+	int GetLength(){ return 3; }
+
 };
 

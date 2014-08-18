@@ -6,5 +6,7 @@ class Destroyer :
 public:
 	Destroyer();
 	~Destroyer();
+
+	int GetLength(){ return 2; }
 };
 

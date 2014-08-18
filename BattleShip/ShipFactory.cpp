@@ -20,7 +20,7 @@ ShipFactory::~ShipFactory()
 {
 }
 
-Ship* ShipFactory::GenerateShip(EShip::Type shipType)
+Ship* ShipFactory::GenerateShip(EShip::Type shipType, int id)
 {
 	Ship* pShip = NULL;
 	switch (shipType)
@@ -41,5 +41,6 @@ Ship* ShipFactory::GenerateShip(EShip::Type shipType)
 		break;
 	}
 
+	pShip->Set_ID(id);
 	return pShip;
 }

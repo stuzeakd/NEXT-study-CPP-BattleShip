@@ -6,5 +6,8 @@ class Battleship :
 public:
 	Battleship();
 	~Battleship();
+
+	int GetLength(){ return 4; }
+
 };
 
