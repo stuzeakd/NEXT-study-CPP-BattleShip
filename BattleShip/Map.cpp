@@ -16,7 +16,15 @@ Map::~Map()
 	//}
 	//delete[] m_Tiles;
 }
-
+Map::Map(const Map& src)
+{
+	Create();
+	for (int i = 0; i < MAP_ROW; i++){
+		for (int j = 0; j < MAP_COL; j++){
+			m_Tiles[i][j] = src.m_Tiles[i][j];
+		}
+	}
+}
 void Map::Create()
 {
 	m_Tiles = new Tile*[MAP_ROW];
@@ -52,6 +60,8 @@ Tile Map::GetTile(Point pos)
 }
 void Map::SetTile(Tile tile)
 {
-	m_Tiles[Utility::Instance().RowOfPoint(tile)][Utility::Instance().ColOfPoint(tile)] = tile;
+	int row = Utility::Instance().RowOfPoint(tile);
+	int col = Utility::Instance().ColOfPoint(tile);
+	m_Tiles[row][col] = tile;
 	//printf("(%d,%d)\n", Utility::Instance().RowOfPoint(tile), Utility::Instance().ColOfPoint(tile));
 }

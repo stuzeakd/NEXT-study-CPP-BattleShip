@@ -15,6 +15,9 @@ const ColorSet GameUIIngame::m_ColorShipDestroyerDamaged = { DARKPURPLE, BLACK }
 const ColorSet GameUIIngame::m_ColorShipStateDamaged = { GREY, BLACK };
 const ColorSet GameUIIngame::m_ColorShipStateDestroyed = { DARKGREY, BLACK };
 
+const ColorSet GameUIIngame::m_ColorTileStateMiss = { WHITE, GREY };
+
+
 const Point GameUIIngame::m_PosNewMessage = { POS_MSG_NEW_X, POS_MSG_NEW_Y };
 const Point GameUIIngame::m_PosMyShips = { POS_MY_SHIPS_X, POS_MY_SHIPS_Y };
 const Point GameUIIngame::m_PosMyMap = { POS_MY_MAP_X, POS_MY_MAP_Y };
@@ -200,7 +203,10 @@ void GameUIIngame::DrawTile(Tile& tile)
 	switch (tile.GetTileState())
 	{
 	case ETile::NONE:
-		printf(" N");
+		ConsoleControl::Instance().SetColor(GenerateColorStateGood(tile.GetShipType()));
+		printf("%s", GenerateShipShape(tile.GetShipType()).c_str());
+		ConsoleControl::Instance().SetColor(m_ColorNormal);
+		printf("N");
 		break;
 	case ETile::HIT:
 		ConsoleControl::Instance().SetColor(GenerateColorStateBad(tile.GetShipType()));
@@ -210,7 +216,7 @@ void GameUIIngame::DrawTile(Tile& tile)
 		break;
 	case ETile::MISS:
 		printf("%s", GenerateShipShape(tile.GetShipType()).c_str());
-		ConsoleControl::Instance().SetColor(m_ColorNormal);
+		ConsoleControl::Instance().SetColor(m_ColorTileStateMiss);
 		printf_s("M");
 		break; 
 	case ETile::DESTROY:
@@ -243,6 +249,8 @@ void GameUIIngame::DrawSystemMsgs(Messages *msgs)
 	std::vector<std::string>::reverse_iterator msg = (msgs->GetMessageVector()).rbegin();
 	//if (msg == msgs.GetMessageVector().rend()) return;
 	ConsoleControl::Instance().SetColor(m_ColorSystemMsg);
+	ConsoleControl::Instance().Gotoxy(POS_MSG_NEW_X, yBottom);
+	printf(BLANK_TWENTY); printf(BLANK_TWENTY);
 	ConsoleControl::Instance().Gotoxy(POS_MSG_NEW_X, yBottom--);
 	printf("%s", msg->c_str());
 	++count;
@@ -251,6 +259,8 @@ void GameUIIngame::DrawSystemMsgs(Messages *msgs)
 	ConsoleControl::Instance().SetColor(m_ColorSystemMsgs);
 	for (++msg ; (msg != msgs->GetMessageVector().rend() && count < SYSTEM_MSG_MAX); ++msg, ++count)
 	{
+		ConsoleControl::Instance().Gotoxy(POS_MSG_NEW_X, yBottom);
+		printf(BLANK_TWENTY); printf(BLANK_TWENTY);
 		ConsoleControl::Instance().Gotoxy(POS_MSG_NEW_X, yBottom--);
 		printf("%s", msg->c_str());
 	}

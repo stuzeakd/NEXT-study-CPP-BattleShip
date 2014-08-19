@@ -78,3 +78,7 @@ void Tile::SetShipType(EShip::Type type)
 {
 	m_ShipType = type;
 }
+Point Tile::GetPoint()
+{
+	return Point(GetX(), GetY());
+}

@@ -5,8 +5,7 @@
 Destroyer::Destroyer()
 {
 	m_Type = EShip::DESTROYER;
-	m_Hp = GetLength();
-	m_Position = new Point[m_Hp];
+	m_Hp = GetLength(); 
 	m_Name = "Destroyer";
 }
 

@@ -14,32 +14,39 @@ public:
 	~Player();
 
 public:
-	Point				Attack();
-	void				Render();
-	void				UpdateTileOnMyMap(Tile tile);
-	void				UpdateTileOnEnemyMap(Tile tile);
-	Point				MakeShipPos();
+	void				Init();
 	virtual void		SetupShips() = 0;
-	void				PrintShips();
-	int					GetHP();
-	Map					GetMap(){ return m_MyMap; }
-	std::vector<Ship*>	GetShips(){ return m_MyShips; }
-	std::string			GetPlayerName(){ return m_PlayerName; }
-	void				SetMyTile(Tile& tile);
-	void				SetEnemyTile(Tile& tile);
-	void				SetPlayerName(std::string name){ m_PlayerName = name; }
-	bool				IsValidAttackPos(Point pos);
+	virtual Point		Attack() = 0;
+	virtual Point		MakeShipPos() = 0;
+	void				Render();
 
-	Map m_EnemyMap;
+	virtual void		UpdateTileOnMyMap(Tile& tile);
+	void				UpdateTileOnEnemyMap(Tile& tile);
+	void				UpdataShipOnMyShips(Ship& ship);
+	void				UpdataShipOnEnemyShips(Ship& ship);
+
+	int					GetHP();
+	std::vector<Ship*>	GetShips(){ return m_MyShips; }
+	Map					GetMap(){ return m_MyMap; }
+	std::string			GetPlayerName(){ return m_PlayerName; }
+	void				SetPlayerName(std::string name){ m_PlayerName = name; }
+	void				SetShipOnMyMap(Ship& ship);
+	//void				SetTile(Tile& tile, Map &map);
+	//void				SetMyTile(Tile& tile);
+	//void				SetEnemyTile(Tile& tile);
+
+//	void				PrintShips();
+	
 protected:
-	void			UpdateTileOnMap(Tile& tile, Map& map);
-	void			SetTile(Tile& tile, Map &map);
-	void			InitShips();
+	bool			IsValidAttackPos(Point pos);
+	bool			IsValidShipPositionOnMap(const Point& head, const Point& tail);
+	void			CreateShips();
 	
 	std::string		m_PlayerName;
 	EPlayer::Type	m_PlayerType;
-	Map				m_MyMap;
 	Messages*		m_Msgs;
+	Map				m_MyMap;
+	Map				m_EnemyMap;
 	std::vector<Ship*> m_MyShips;
 	std::vector<Ship*> m_EnemyShips;
 };

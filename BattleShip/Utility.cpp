@@ -52,6 +52,55 @@ bool Utility::IsValidNumCol(char c){
 	if ('1' <= c && c <= '0' + MAP_COL) return true;
 	else return false;
 }
+bool Utility::IsUncrossedLine(const Point& line1pos1, const Point& line1pos2, const Point& line2pos1, const Point& line2pos2)
+{
+	bool isLine1Vertical = line1pos1.GetX() == line1pos2.GetX();
+	bool isLine2Vertical = line2pos1.GetX() == line2pos2.GetX();
+	bool isLine1Horizontal = line1pos1.GetY() == line1pos2.GetY();
+	bool isLine2Horizontal = line2pos1.GetY() == line2pos2.GetY();
+	//Wrong input check.
+
+	//They're Not a Line but just a Point. 
+	if ((isLine1Vertical && isLine1Horizontal) || (isLine2Vertical && isLine2Horizontal)) return false; 
+	//Line is tilted
+	else if (!(isLine1Vertical || isLine1Horizontal) || !(isLine2Vertical || isLine2Horizontal)) return false;
+	
+	else if (isLine1Horizontal && isLine2Horizontal)
+	{
+		if (line1pos1.GetY() != line2pos1.GetY()) return true; //Lines are parallel
+		else return false; //Lines are same.
+	}
+	else if (isLine1Vertical && isLine2Vertical)
+	{
+		if (line1pos1.GetX() != line2pos1.GetX()) return true; //Lines are parallel
+		else return false; //Lines are same.
+	}
+
+	else if (isLine1Vertical && isLine2Horizontal)
+	{
+		if (line1pos1.GetX() > line2pos1.GetX() && line1pos1.GetX() > line2pos2.GetX()) return true;
+		else if (line1pos1.GetX() < line2pos1.GetX() && line1pos1.GetX() < line2pos2.GetX()) return true;
+		else
+		{
+			if (line1pos1.GetY() > line2pos1.GetY() && line1pos2.GetY() > line2pos1.GetY()) return true;
+			else if (line1pos1.GetY() < line2pos1.GetY() && line1pos2.GetY() < line2pos1.GetY()) return true;
+			else return false;
+		}
+	}
+	else if (isLine1Horizontal && isLine2Vertical)
+	{
+		if (line1pos1.GetY() > line2pos1.GetY() && line1pos1.GetY() > line2pos2.GetY()) return true;
+		else if (line1pos1.GetY() < line2pos1.GetY() && line1pos1.GetY() < line2pos2.GetY()) return true;
+		else
+		{
+			if (line1pos1.GetX() > line2pos1.GetX() && line1pos2.GetX() > line2pos1.GetX()) return true;
+			else if (line1pos1.GetX() < line2pos1.GetX() && line1pos2.GetX() < line2pos1.GetX()) return true;
+			else return false;
+		}
+	}
+	else printf("unexpected err");
+}
+
 char Utility::LowerToUpper(char c)
 {
 	if (IsValidLowerRow(c)) return c - ('a' - 'A');

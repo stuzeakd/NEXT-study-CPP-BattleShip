@@ -9,30 +9,30 @@ public:
 	~Ship();
 
 public:
-	void AddPosition(Point pos);
-	void Set_ID(int id){ m_Id = id; }
-	void GiveDamage(){ if(m_Hp > 0) --m_Hp; }
-
-	std::string	GetName(){ return m_Name; }
-	int			GetHP(){ return m_Hp;}
-	virtual int GetLength(){ return 0; }
-	EShip::Type GetType(){ return m_Type; }
-	Point*		GetM_Position();
-
-	bool IsFinishToAddPos();
+	bool			SetPosition(const Point& head, const Point& tail);
+	void			Set_ID(int id){ m_Id = id; }
 	
-	//for check
-	void PrintPos();
+	void			GiveDamage(){ if(m_Hp > 0) --m_Hp; }
 
+	EShip::Type&	GetType(){ return m_Type; }
+	std::string&	GetName(){ return m_Name; }
+	int&			GetHP(){ return m_Hp; }
+	int&			GetID(){ return m_Id; }
+	virtual int		GetLength() = 0;
+	Point&			GetHeadPos(){ return m_HeadPos; }
+	Point&			GetTailPos(){ return m_TailPos; }
+
+	bool			IsValidPosition(const Point& head, const Point& tail);
+	//bool IsFinishToAddPos();
+	
 protected:
-	bool IsValidM_Position();
 
 	EShip::Type m_Type;
 	std::string m_Name;
 	int m_Hp;
 	int m_Id;
-	Point* m_Position;
-	int m_PositionIdx;
-
+	Point m_HeadPos;
+	Point m_TailPos;
+	
 };
 

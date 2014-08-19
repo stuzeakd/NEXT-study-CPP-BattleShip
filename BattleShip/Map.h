@@ -8,6 +8,7 @@ class Map
 public:
 	Map();
 	~Map();
+	Map(const Map& src);
 public:
 	void Draw();
 	Tile GetTile(int row, int col);

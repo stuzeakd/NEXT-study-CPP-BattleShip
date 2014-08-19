@@ -24,6 +24,10 @@
 #define YELLOW 14
 #define WHITE 15
 
+#define BLANK_FIVE "     "
+#define BLANK_TEN "          "
+#define BLANK_TWENTY "                    "
+
 #define WINDOW_SIZE_WIDTH 100
 #define WINDOW_SIZE_HEIGHT 50
 
@@ -38,10 +42,17 @@
 #define POS_ENEMY_MAP_X 45
 #define POS_ENEMY_MAP_Y 3
 #define POS_INPUT_X 30
-#define POS_INPUT_Y 13
+#define POS_INPUT_Y 15
 
 #define SYSTEM_MSG_MAX 5
 
+#define MSG_SETUP_SHIP_MAKING_FAIL	"Incorrect Ship Setting"
+#define MSG_SETUP_SHIP_ON_MAP_FAIL	"Incorrect. Ship Collision"
+#define MSG_INPUT_HEAD_POS	"Input head Point"
+#define MSG_INPUT_TAIL_POS	"Input tail Point"
+#define MSG_ATTACK			"Attack!"
+#define MSG_WRONG_ATTACK	"You already did."
+#define MSG_WRONG_INPUT		"Wrong Input"
 class GameUIIngame
 {
 public:
@@ -84,6 +95,8 @@ private:
 	static const ColorSet m_ColorShipDestroyerDamaged;
 	static const ColorSet m_ColorShipStateDamaged;
 	static const ColorSet m_ColorShipStateDestroyed;
+
+	static const ColorSet m_ColorTileStateMiss;
 
 	static const Point m_PosNewMessage;
 	static const Point m_PosMyShips;

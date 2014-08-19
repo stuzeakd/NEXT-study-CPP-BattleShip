@@ -8,5 +8,7 @@ public:
 	~AI();
 
 	void SetupShips();
+	Point MakeShipPos();
+	Point Attack();
 };
 

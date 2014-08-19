@@ -4,7 +4,7 @@
 
 Player::Player()
 {
-	InitShips();
+	Init();
 	m_PlayerName = "";
 }
 Player::~Player()
@@ -12,16 +12,20 @@ Player::~Player()
 }
 Player::Player(EPlayer::Type type){
 }
-
-void Player::InitShips()
+void Player::Init()
 {
-	for (int i = 0; i < _countof(shipRule); i++){
-		m_MyShips.push_back(ShipFactory::Instance() -> GenerateShip(shipRule[i], i));
-	}
-	for (int i = 0; i < _countof(shipRule); i++){
-		m_EnemyShips.push_back(ShipFactory::Instance()->GenerateShip(shipRule[i], i));
-	}
+	CreateShips();
 	m_Msgs = new Messages();
+}
+void Player::CreateShips()
+{
+	//##id is same with vector position.##
+	for (int id = 0; id < _countof(shipRule); id++){
+		m_MyShips.push_back(ShipFactory::Instance() -> GenerateShip(shipRule[id], id));
+	}
+	for (int id = 0; id < _countof(shipRule); id++){
+		m_EnemyShips.push_back(ShipFactory::Instance()->GenerateShip(shipRule[id], id));
+	}
 }
 void Player::Render()
 {
@@ -32,53 +36,25 @@ void Player::Render()
 	GameUIIngame::Instance().DrawMyMap(m_MyMap);
 	GameUIIngame::Instance().DrawEnemyMap(m_EnemyMap);
 }
-void Player::UpdateTileOnMap(Tile& tile, Map& map)
+
+void Player::UpdateTileOnMyMap(Tile& tile)
 {
-	map.SetTile(tile);
-}
-void Player::UpdateTileOnMyMap(Tile tile)
-{
+	//if (tile.GetTileState == ETile::DESTROY)
+	//{
+	//	m_MyShips.at(tile.GetShipID())
+	//}
 	m_MyMap.SetTile(tile);
 }
-void Player::UpdateTileOnEnemyMap(Tile tile)
+void Player::UpdateTileOnEnemyMap(Tile& tile)
 {
 	m_EnemyMap.SetTile(tile);
-	//UpdateTileOnMap(tile, m_EnemyMap);
-	//printf("after update : %d point (%d, %d)\n", m_EnemyMap.GetTile(tile).GetTileState(), m_EnemyMap.GetTile(tile).GetX(), m_EnemyMap.GetTile(tile).GetY());
 }
-Point Player::Attack()
-{
-	GameUIIngame::Instance().DrawSystemMsgs(m_Msgs, "Attack!");
-	Point pos = MakeShipPos();
-	while (!IsValidAttackPos(pos))
-	{
-		GameUIIngame::Instance().DrawSystemMsgs(m_Msgs, "You already did.");
-		GameUIIngame::Instance().DrawInput("Position : ");
-		pos = MakeShipPos();
-	}
-	return pos;
-}
-Point Player::MakeShipPos()
-{
-	GameUIIngame::Instance().DrawInput("Position : ");
-	std::string input;
-	std::cin >> input;
-	getchar();
-	while (!Utility::Instance().IsValidRC(input)){
-		GameUIIngame::Instance().DrawSystemMsgs(m_Msgs, "Wrong Input");
-		GameUIIngame::Instance().DrawInput("Position : ");
-		//printf("errinMakeShipPos");
-		std::cin >> input; 
-		getchar();
-	}
-	return Utility::Instance().StringToPoint(input);                  
-}
-void Player::PrintShips(){
-	for (std::vector<Ship*>::iterator IterPos = m_MyShips.begin(); IterPos != m_MyShips.end(); ++IterPos){
-		(*IterPos)->PrintPos();
-		std::cout << (*IterPos)->GetName() << "\n";
-	}
-}
+//void Player::PrintShips(){
+//	for (std::vector<Ship*>::iterator IterPos = m_MyShips.begin(); IterPos != m_MyShips.end(); ++IterPos){
+//		(*IterPos)->PrintPos();
+//		std::cout << (*IterPos)->GetName() << "\n";
+//	}
+//}
 int Player::GetHP(){
 	int HP = 0;
 	for (auto ship : m_MyShips){
@@ -86,21 +62,70 @@ int Player::GetHP(){
 	}
 	return HP;
 }
-void Player::SetTile(Tile& tile, Map& map)
+void Player::SetShipOnMyMap(Ship& ship)
 {
-	map.SetTile(tile);
-
+	Point head = ship.GetHeadPos();
+	Point tail = ship.GetTailPos();
+	Tile tmpTile;
+	int dir;
+	if (head.GetX() == -1 || tail.GetX() == -1) return;
+	if (head.GetX() == tail.GetX())
+	{
+		if (head.GetY() < tail.GetY()) dir = 1;
+		else dir = -1;
+		tmpTile.SetX(head.GetX());
+		for (int y = head.GetY(); y != tail.GetY() + dir; y += dir)
+		{
+			tmpTile.SetY(y);
+			tmpTile.SetShipType(ship.GetType());
+			tmpTile.SetID(ship.GetID());
+			m_MyMap.SetTile(tmpTile);
+		}
+	}
+	else if (head.GetY() == tail.GetY())
+	{
+		if (head.GetX() < tail.GetX()) dir = 1;
+		else dir = -1;
+		tmpTile.SetY(head.GetY());
+		for (int x = head.GetX(); x != tail.GetX() + dir; x += dir)
+		{
+			tmpTile.SetX(x);
+			tmpTile.SetShipType(ship.GetType());
+			tmpTile.SetID(ship.GetID());
+			m_MyMap.SetTile(tmpTile);
+		}
+	}
+	else printf("unexpected err");
 }
-void Player::SetMyTile(Tile& tile)
-{
-	SetTile(tile, m_MyMap);
-}
-void Player::SetEnemyTile(Tile& tile)
-{
-	m_EnemyMap.SetTile(tile);
-}
+//void Player::SetTile(Tile& tile, Map& map)
+//{
+//	map.SetTile(tile);
+//
+//}
+//void Player::SetMyTile(Tile& tile)
+//{
+//	SetTile(tile, m_MyMap);
+//}
+//void Player::SetEnemyTile(Tile& tile)
+//{
+//	m_EnemyMap.SetTile(tile);
+//}
 bool Player::IsValidAttackPos(Point pos)
 {
 	if ( m_EnemyMap.GetTile(pos).GetTileState() == ETile::NONE ) return true;
 	else return false;
+}
+bool Player::IsValidShipPositionOnMap(const Point& head, const Point& tail)
+{
+	bool isHorizontal = head.GetX() == tail.GetX();
+	for (auto ship : m_MyShips){
+		Point& shipHead = ship->GetHeadPos();
+		Point& shipTail = ship->GetTailPos();
+		if ((shipHead.GetX() == -1) || (shipTail.GetX() == -1)) continue;
+		if (!Utility::Instance().IsUncrossedLine(head, tail, shipHead, shipTail))
+		{
+			return false;
+		}
+	}
+	return true;
 }

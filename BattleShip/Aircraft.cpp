@@ -6,7 +6,6 @@ Aircraft::Aircraft()
 {
 	m_Type = EShip::AIRCRAFT;
 	m_Hp = GetLength();
-	m_Position = new Point[m_Hp];
 	m_Name = "Aircraft";
 }
 
