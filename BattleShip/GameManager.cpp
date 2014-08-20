@@ -11,10 +11,10 @@ GameManager& GameManager::Instance(){
 GameManager::GameManager()
 {
 }
-
-
 GameManager::~GameManager()
 {
+	delete m_P1Data.player;
+	delete m_P2Data.player;
 }
 void GameManager::Run()
 {
@@ -37,56 +37,55 @@ void GameManager::GameInit()
 	m_P2Data.map = (m_P2Data.player)->GetMap();
 	//GameUIIngame::Instance().DrawEnemyMap((m_P1Data.player)->GetMap());
 
-	m_P1Data.ships = (m_P1Data.player)->GetShips();
-	m_P2Data.ships = (m_P1Data.player)->GetShips();
+	for (auto ship : m_P1Data.player->GetShips())
+	{
+		Ship *tmpShip = ShipFactory::Instance()->GenerateShip(ship->GetType(), ship->GetID());
+		m_P1Data.ships.push_back(tmpShip);
+	}
+	for (auto ship : m_P2Data.player->GetShips())
+	{
+		Ship *tmpShip = ShipFactory::Instance()->GenerateShip(ship->GetType(), ship->GetID());
+		m_P2Data.ships.push_back(tmpShip);
+	}
 
-	m_Attacker = &m_P1Data;
-	m_Defender = &m_P2Data;
+	m_AttackerData = &m_P1Data;
+	m_DefenderData = &m_P2Data;
 }
 void GameManager::GameStart()
 {
 	Draw();
 	while (!IsTimeToQuit())
 	{
-		Point pos = (m_Attacker->player)->Attack();
+		Point pos = (m_AttackerData->player)->Attack();
+		//getchar();
 		Tile m_TmpTile = HitCheck(pos);
 		//printf("%d, (%d %d)", m_TmpTile.GetTileState(), m_TmpTile.GetX(), m_TmpTile.GetY());
 		Update(m_TmpTile);
-		//getchar();
 		Draw();
 		SwapAttDef();
 	}
-	//Tile& m_TmpTile = HitCheck(pos);
-	//Update();
-	//Draw();
-	//
-	
-	//while (!IsTimeToQuit())
-	//{
-	//	Point pos = (*m_Attacker).MakeShipPos();
-	//	Tile& m_TmpTile = HitCheck(pos);
-	//	Update();
-	//	Draw();
-	//	SwapAttDef();
-	//}
 }
 void GameManager::Draw()
 {
+	ConsoleControl::Instance().Clear();
+	m_P1Data.player->Render();
 	m_P2Data.player->Render();
 }
 Tile GameManager::HitCheck(const Point& pos)
 {
-	Tile targetTile = (m_Defender->map).GetTile(pos);
+	Tile targetTile = (m_DefenderData->map).GetTile(pos);
+
 	if (targetTile.GetShipType() != EShip::NONE)
 	{
-		Ship *targetShip = ( (m_Defender->ships).at(targetTile.GetShipID()) );
+		Ship *targetShip = ( (m_DefenderData->ships).at(targetTile.GetShipID()) );
 		targetShip->GiveDamage();
 
 		if (targetShip->GetHP() > 0) targetTile.SetTileState(ETile::HIT);// Ship state is damaged
 		else if (targetShip->GetHP() == 0)
 		{
 			targetTile.SetTileState(ETile::DESTROY);		// Ship state is Destroyed
-			targetTile.SetShipType(targetShip->GetType());	// Give Ship type.
+			//resultTile.SetShipType(targetShip->GetType());	// Give Ship type.
+			//resultTile.SetID(targetShip->GetID());
 		}
 		else printf("unexpected err");
 	}
@@ -96,19 +95,35 @@ Tile GameManager::HitCheck(const Point& pos)
 	}
 	return targetTile;
 }
-void GameManager::Update(Tile& tile)
+void GameManager::Update(Tile& resultTile)
 {
-	(m_Attacker->map).SetTile(tile);
-	(m_Defender->map).SetTile(tile);
-	(m_Defender->ships);
-	(m_Defender->ships);
-	(m_Attacker->player)->UpdateTileOnEnemyMap(tile);
-	(m_Defender->player)->UpdateTileOnMyMap(tile);
+	int targetShipID = resultTile.GetShipID();
+
+	(m_AttackerData->map).UpdateTile(resultTile);
+	(m_DefenderData->map).UpdateTile(resultTile);
+
+	Tile capsuleTile;
+	capsuleTile.SetPoint(resultTile);
+	capsuleTile.SetTileState(resultTile.GetTileState());
+
+	if (resultTile.GetShipType() != EShip::NONE)
+	{
+		Ship *targetShip = m_DefenderData->ships.at(targetShipID);
+		if (targetShip->GetHP() == 0){
+			(m_AttackerData->player)->UpdateShipOnEnemyShips(*targetShip);
+			capsuleTile.SetID(targetShipID);
+			capsuleTile.SetShipType(targetShip->GetType());
+		}
+		(m_DefenderData->player)->UpdateShipOnMyShips(*targetShip);
+	}
+
+	(m_AttackerData->player)->UpdateTileOnEnemyMap(capsuleTile);
+	(m_DefenderData->player)->UpdateTileOnMyMap(capsuleTile);
 }
 void GameManager::SwapAttDef()
 {
 	PlayerData* tmp;
-	tmp = m_Attacker;
-	m_Attacker = m_Defender;
-	m_Defender = tmp;
+	tmp = m_AttackerData;
+	m_AttackerData = m_DefenderData;
+	m_DefenderData = tmp;
 }

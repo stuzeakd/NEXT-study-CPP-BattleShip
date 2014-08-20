@@ -14,6 +14,7 @@ public:
 	Tile GetTile(int row, int col);
 	Tile GetTile(Point pos);
 	void SetTile(Tile tile);
+	void UpdateTile(Tile tile);
 
 private:
 	void Create();

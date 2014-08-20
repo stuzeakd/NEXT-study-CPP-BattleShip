@@ -7,7 +7,7 @@ public:
 	Battleship();
 	~Battleship();
 
-	int GetLength(){ return 4; }
+	int GetLength() const { return 4; }
 
 };
 

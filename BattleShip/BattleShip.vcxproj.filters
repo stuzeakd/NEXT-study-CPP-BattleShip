@@ -102,6 +102,9 @@
     <ClInclude Include="Messages.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="UDLRRand.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -166,6 +169,9 @@
     </ClCompile>
     <ClCompile Include="Messages.cpp">
       <Filter>소스 파일\System</Filter>
+    </ClCompile>
+    <ClCompile Include="UDLRRand.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

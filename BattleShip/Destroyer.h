@@ -7,6 +7,6 @@ public:
 	Destroyer();
 	~Destroyer();
 
-	int GetLength(){ return 2; }
+	int GetLength() const { return 2; }
 };
 

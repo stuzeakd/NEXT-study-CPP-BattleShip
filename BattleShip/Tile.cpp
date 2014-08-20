@@ -70,6 +70,10 @@ void Tile::SetPoint(int x, int y){
 	SetX(x);
 	SetY(y);
 }
+void Tile::SetPoint(Point pos)
+{
+	SetPoint(pos.GetX(), pos.GetY());
+}
 void Tile::SetTileState(ETile::State state)
 {
 	m_TileState = state;

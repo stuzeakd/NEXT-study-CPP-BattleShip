@@ -24,18 +24,6 @@ void ConsoleControl::Gotoxy(int x, int y)
 }
 void ConsoleControl::SetWindowSize(int width, int height)
 {
-	//SMALL_RECT r = { 0, 0, width - 1, height - 1 };
-	//COORD      c;
-	//HANDLE hConOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	////#include <limits>
-	////#include <stdexcept>
-	////if (!GetConsoleScreenBufferInfo(hConOut, &csbi))
-	////	throw runtime_error("You must be attached to a human.");
-	//c.X = width;
-	//c.Y = height;
-	//SetConsoleScreenBufferSize(hConOut, c);
-	//SetConsoleWindowInfo(hConOut, TRUE, &r);
-	//printf("!!!!!!!!!!!!!!");
 
 }
 void ConsoleControl::Gotoxy(Point pos)

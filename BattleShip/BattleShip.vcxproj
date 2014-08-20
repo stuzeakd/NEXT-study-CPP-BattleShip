@@ -102,6 +102,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="GameUIMain.h" />
+    <ClInclude Include="UDLRRand.h" />
     <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>
@@ -128,6 +129,7 @@
     </ClCompile>
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="GameUIMain.cpp" />
+    <ClCompile Include="UDLRRand.cpp" />
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

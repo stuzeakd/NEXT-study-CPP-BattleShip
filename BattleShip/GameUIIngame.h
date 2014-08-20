@@ -43,6 +43,8 @@
 #define POS_ENEMY_MAP_Y 3
 #define POS_INPUT_X 30
 #define POS_INPUT_Y 15
+#define POS_PRESS_ENTER_X 30
+#define POS_PRESS_ENTER_Y 24
 
 #define SYSTEM_MSG_MAX 5
 
@@ -53,6 +55,10 @@
 #define MSG_ATTACK			"Attack!"
 #define MSG_WRONG_ATTACK	"You already did."
 #define MSG_WRONG_INPUT		"Wrong Input"
+#define MSG_UPDATE_ENEMY_SHIP_1 "Enemy's "
+#define MSG_UPDATE_ENEMY_SHIP_2 " has destroyed."
+#define MSG_UPDATE_MY_SHIP_1 "Your "
+#define MSG_UPDATE_MY_SHIP_2 " has damaged."
 class GameUIIngame
 {
 public:
@@ -67,10 +73,19 @@ public:
 	void DrawEnemyShips(std::vector<Ship*> &ships);
 	void DrawMyMap(Map& myMap);
 	void DrawEnemyMap(Map& enemyMap);
+
+	void DrawMyShipsP2(std::vector<Ship*> &ships);
+	void DrawEnemyShipsP2(std::vector<Ship*> &ships);
+	void DrawMyMapP2(Map& myMap);
+	void DrawEnemyMapP2(Map& enemyMap);
+
 	void DrawSystemMsgs(Messages* msgs);
 	void DrawSystemMsgs(Messages* msgs, std::string msg);
 	void DrawInput();
 	void DrawInput(std::string msg);
+	void DrawPressEnter();
+	void ClearLineWith(Point& pos, std::string blank);
+
 private:
 	void Init();
 	ColorSet GenerateColorStateGood(EShip::Type type);
@@ -104,6 +119,21 @@ private:
 	static const Point m_PosEnemyShips;
 	static const Point m_PosEnemyMap;
 	static const Point m_PosInput;
+	static const Point m_PosPressEnter;
+
+	static const Point m_PosNewMessageP2;
+	static const Point m_PosMyShipsP2;
+	static const Point m_PosMyMapP2;
+	static const Point m_PosEnemyShipsP2;
+	static const Point m_PosEnemyMapP2;
+	static const Point m_PosInputP2;
+	static const Point m_PosPressEnterP2;
+
+
+	//static const std::string m_MsgUpdateMyShip1;
+	//static const std::string m_MsgUpdateMyShip2;
+	//static const std::string m_MsgUpdateEnemyShip1;
+	//static const std::string m_MsgUpdateEnemyShip2;
 
 	static const std::string m_ShapeShipNone;
 	static const std::string m_ShapeShipAircraft;

@@ -7,7 +7,7 @@ public:
 	Cruiser();
 	~Cruiser();
 
-	int GetLength(){ return 3; }
+	int GetLength() const { return 3; }
 
 };
 

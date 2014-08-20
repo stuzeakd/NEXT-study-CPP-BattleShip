@@ -22,6 +22,7 @@ public:
 	void Draw();
 	void SetID(int id){ m_ShipId = id; }
 	void SetPoint(int x, int y);
+	void SetPoint(Point pos);
 	void SetTileState(ETile::State state);
 	void SetShipType(EShip::Type type);
 	Point			GetPoint();

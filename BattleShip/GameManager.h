@@ -38,7 +38,7 @@ protected:
 protected:
 	PlayerData m_P1Data;
 	PlayerData m_P2Data;
-	PlayerData *m_Attacker;
-	PlayerData *m_Defender;
+	PlayerData *m_AttackerData;
+	PlayerData *m_DefenderData;
 };
 

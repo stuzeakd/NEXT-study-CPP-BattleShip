@@ -7,6 +7,6 @@ public:
 	Aircraft();
 	~Aircraft();
 
-	int GetLength(){ return 5; }
+	int GetLength() const { return 5; }
 };
 

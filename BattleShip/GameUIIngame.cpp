@@ -24,6 +24,15 @@ const Point GameUIIngame::m_PosMyMap = { POS_MY_MAP_X, POS_MY_MAP_Y };
 const Point GameUIIngame::m_PosEnemyShips = { POS_ENEMY_SHIPS_X, POS_ENEMY_SHIPS_Y };
 const Point GameUIIngame::m_PosEnemyMap = { POS_ENEMY_MAP_X, POS_ENEMY_MAP_Y };
 const Point GameUIIngame::m_PosInput = { POS_INPUT_X, POS_INPUT_Y };
+const Point GameUIIngame::m_PosPressEnter = { POS_PRESS_ENTER_X, POS_PRESS_ENTER_Y };
+
+const Point GameUIIngame::m_PosNewMessageP2 = { POS_MSG_NEW_X, POS_MSG_NEW_Y + 30 };
+const Point GameUIIngame::m_PosMyShipsP2 = { POS_MY_SHIPS_X, POS_MY_SHIPS_Y +30 };
+const Point GameUIIngame::m_PosMyMapP2 = { POS_MY_MAP_X, POS_MY_MAP_Y +30 };
+const Point GameUIIngame::m_PosEnemyShipsP2 = { POS_ENEMY_SHIPS_X, POS_ENEMY_SHIPS_Y +30 };
+const Point GameUIIngame::m_PosEnemyMapP2 = { POS_ENEMY_MAP_X, POS_ENEMY_MAP_Y +30 };
+const Point GameUIIngame::m_PosInputP2 = { POS_INPUT_X, POS_INPUT_Y +30 };
+const Point GameUIIngame::m_PosPressEnterP2 = { POS_PRESS_ENTER_X, POS_PRESS_ENTER_Y +30 };
 
 const std::string GameUIIngame::m_ShapeShipNone = " ";
 const std::string GameUIIngame::m_ShapeShipAircraft = "A";
@@ -50,6 +59,7 @@ GameUIIngame::~GameUIIngame()
 }
 void GameUIIngame::Init()
 {
+	system("mode con:cols=100 lines=50");
 	ConsoleControl::Instance().SetWindowSize(WINDOW_SIZE_WIDTH, WINDOW_SIZE_HEIGHT);
 }
 ColorSet GameUIIngame::GenerateColorStateGood(EShip::Type type)
@@ -163,6 +173,14 @@ void GameUIIngame::DrawEnemyShips(std::vector<Ship*>& ships)
 {
 	DrawShips(ships, m_PosEnemyShips);
 }
+void GameUIIngame::DrawMyShipsP2(std::vector<Ship*>& ships)
+{
+	DrawShips(ships, m_PosMyShipsP2);
+}
+void GameUIIngame::DrawEnemyShipsP2(std::vector<Ship*>& ships)
+{
+	DrawShips(ships, m_PosEnemyShipsP2);
+}
 void GameUIIngame::DrawMap(Map& map, const Point& stdPos)
 {
 	Point pos;
@@ -239,6 +257,14 @@ void GameUIIngame::DrawEnemyMap(Map& map)
 {
 	DrawMap(map, m_PosEnemyMap);
 }
+void GameUIIngame::DrawMyMapP2(Map& map)
+{
+	DrawMap(map, m_PosMyMapP2);
+}
+void GameUIIngame::DrawEnemyMapP2(Map& map)
+{
+	DrawMap(map, m_PosEnemyMapP2);
+}
 void GameUIIngame::DrawSystemMsgs(Messages *msgs)
 {
 	int yBottom = POS_MSG_NEW_Y;
@@ -280,4 +306,16 @@ void GameUIIngame::DrawInput(std::string msg)
 	ConsoleControl::Instance().Gotoxy(m_PosInput.GetX() - msg.size() , m_PosInput.GetY());
 	printf("%s", msg.c_str());
 	DrawInput();
+}
+void GameUIIngame::DrawPressEnter()
+{
+	ConsoleControl::Instance().Gotoxy(m_PosPressEnter);
+	printf("<Press Enter>");
+	getchar();
+	ConsoleControl::Instance().Gotoxy(m_PosPressEnter);
+	printf(BLANK_TWENTY);
+}
+void GameUIIngame::ClearLineWith(Point& pos, std::string blank)
+{
+
 }

@@ -11,6 +11,7 @@ public:
 	std::vector<std::string>&	GetMessageVector(){ return m_MsgVector; }
 
 private:
+	//I'm hungry.
 	std::vector<std::string> m_MsgVector;
 };
 

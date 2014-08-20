@@ -9,6 +9,7 @@
 class Player
 {
 public:
+	//I'm hungry.
 	Player();
 	Player(EPlayer::Type type);
 	~Player();
@@ -18,12 +19,12 @@ public:
 	virtual void		SetupShips() = 0;
 	virtual Point		Attack() = 0;
 	virtual Point		MakeShipPos() = 0;
-	void				Render();
+	virtual void		Render() = 0;
 
 	virtual void		UpdateTileOnMyMap(Tile& tile);
-	void				UpdateTileOnEnemyMap(Tile& tile);
-	void				UpdataShipOnMyShips(Ship& ship);
-	void				UpdataShipOnEnemyShips(Ship& ship);
+	virtual void		UpdateTileOnEnemyMap(Tile& tile);
+	virtual void		UpdateShipOnMyShips(Ship& ship);
+	virtual void		UpdateShipOnEnemyShips(Ship& ship);
 
 	int					GetHP();
 	std::vector<Ship*>	GetShips(){ return m_MyShips; }
@@ -31,14 +32,10 @@ public:
 	std::string			GetPlayerName(){ return m_PlayerName; }
 	void				SetPlayerName(std::string name){ m_PlayerName = name; }
 	void				SetShipOnMyMap(Ship& ship);
-	//void				SetTile(Tile& tile, Map &map);
-	//void				SetMyTile(Tile& tile);
-	//void				SetEnemyTile(Tile& tile);
-
-//	void				PrintShips();
 	
 protected:
 	bool			IsValidAttackPos(Point pos);
+	//I'm hungry.
 	bool			IsValidShipPositionOnMap(const Point& head, const Point& tail);
 	void			CreateShips();
 	
@@ -49,5 +46,6 @@ protected:
 	Map				m_EnemyMap;
 	std::vector<Ship*> m_MyShips;
 	std::vector<Ship*> m_EnemyShips;
+	//I'm hungry.
 };
 

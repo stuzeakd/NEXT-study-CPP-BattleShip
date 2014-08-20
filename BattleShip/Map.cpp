@@ -65,3 +65,9 @@ void Map::SetTile(Tile tile)
 	m_Tiles[row][col] = tile;
 	//printf("(%d,%d)\n", Utility::Instance().RowOfPoint(tile), Utility::Instance().ColOfPoint(tile));
 }
+void Map::UpdateTile(Tile tile)
+{
+	int row = Utility::Instance().RowOfPoint(tile);
+	int col = Utility::Instance().ColOfPoint(tile);
+	m_Tiles[row][col].SetTileState(tile.GetTileState());
+}
