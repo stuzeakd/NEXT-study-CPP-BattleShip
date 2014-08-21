@@ -71,13 +71,13 @@ private:
 public:
 	void DrawMyShips(std::vector<Ship*> &ships);
 	void DrawEnemyShips(std::vector<Ship*> &ships);
-	void DrawMyMap(Map& myMap);
-	void DrawEnemyMap(Map& enemyMap);
+	void DrawMyMap(Map* myMap);
+	void DrawEnemyMap(Map* enemyMap);
 
 	void DrawMyShipsP2(std::vector<Ship*> &ships);
 	void DrawEnemyShipsP2(std::vector<Ship*> &ships);
-	void DrawMyMapP2(Map& myMap);
-	void DrawEnemyMapP2(Map& enemyMap);
+	void DrawMyMapP2(Map* myMap);
+	void DrawEnemyMapP2(Map* enemyMap);
 
 	void DrawSystemMsgs(Messages* msgs);
 	void DrawSystemMsgs(Messages* msgs, std::string msg);
@@ -93,7 +93,7 @@ private:
 	std::string GenerateShipShape(EShip::Type type);
 	void DrawShip(Ship *ship);
 	void DrawShips(std::vector<Ship*>& ships, Point pos); 
-	void DrawMap(Map& map, const Point& stdPos);
+	void DrawMap(Map* map, const Point& stdPos);
 	void DrawTile(Tile& tile);
 
 private:

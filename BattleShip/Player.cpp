@@ -10,6 +10,8 @@ Player::Player()
 Player::~Player()
 {
 	delete m_Msgs;
+	delete m_MyMap;
+	delete m_EnemyMap;
 }
 Player::Player(EPlayer::Type type){
 }
@@ -17,6 +19,8 @@ void Player::Init()
 {
 	CreateShips();
 	m_Msgs = new Messages();
+	m_MyMap = new Map();
+	m_EnemyMap = new Map();
 }
 void Player::CreateShips()
 {
@@ -41,35 +45,43 @@ void Player::UpdateTileOnMyMap(Tile& tile)
 	//		t
 	//	}
 	//}	
-	m_MyMap.UpdateTile(tile);
+	m_MyMap->UpdateTile(tile);
 }
 void Player::UpdateTileOnEnemyMap(Tile& tile)
 {
-	m_EnemyMap.SetTile(tile);
+	m_EnemyMap->SetTile(tile);
 }
 void Player::UpdateShipOnMyShips(Ship& ship)
 {
 	if (ship.GetHP() > 0) m_MyShips.at(ship.GetID())->GiveDamage();
-	if (ship.GetHP() == 0) m_MyShips.at(ship.GetID())->Destroy();
-
+	if (ship.GetHP() == 0){
+		m_MyShips.at(ship.GetID())->Destroy();
+		SetShipOnMyMap(ship);
+	}
 }
 void Player::UpdateShipOnEnemyShips(Ship& ship)
 {
 	m_EnemyShips.at(ship.GetID())->Destroy();
+	SetShipOnEnemyMap(ship);
 }
 
-int Player::GetHP(){
+int Player::GetHP()
+{
 	int HP = 0;
 	for (auto ship : m_MyShips){
 		HP += ship->GetHP();
 	}
 	return HP;
 }
-void Player::SetShipOnMyMap(Ship& ship)
+void Player::SetShipOnMap(Ship& ship, Map* map)
 {
 	Point head = ship.GetHeadPos();
 	Point tail = ship.GetTailPos();
 	Tile tmpTile;
+	if (ship.GetHP() == 0) tmpTile.SetTileState(ETile::DESTROY);
+	else if (ship.GetHP() != ship.GetLength()) tmpTile.SetTileState(ETile::HIT);
+	//defalut ETile::NONE;
+
 	int dir;
 	if (head.GetX() == -1 || tail.GetX() == -1) return;
 	if (head.GetX() == tail.GetX())
@@ -82,7 +94,7 @@ void Player::SetShipOnMyMap(Ship& ship)
 			tmpTile.SetY(y);
 			tmpTile.SetShipType(ship.GetType());
 			tmpTile.SetID(ship.GetID());
-			m_MyMap.SetTile(tmpTile);
+			map->SetTile(tmpTile);
 		}
 	}
 	else if (head.GetY() == tail.GetY())
@@ -95,14 +107,22 @@ void Player::SetShipOnMyMap(Ship& ship)
 			tmpTile.SetX(x);
 			tmpTile.SetShipType(ship.GetType());
 			tmpTile.SetID(ship.GetID());
-			m_MyMap.SetTile(tmpTile);
+			map->SetTile(tmpTile);
 		}
 	}
 	else printf("unexpected err");
 }
+void Player::SetShipOnMyMap(Ship& ship)
+{
+	SetShipOnMap(ship, m_MyMap);
+}
+void Player::SetShipOnEnemyMap(Ship& ship)
+{
+	SetShipOnMap(ship, m_EnemyMap);
+}
 bool Player::IsValidAttackPos(Point pos)
 {
-	if ( m_EnemyMap.GetTile(pos).GetTileState() == ETile::NONE ) return true;
+	if ( m_EnemyMap->GetTile(pos).GetTileState() == ETile::NONE ) return true;
 	else return false;
 }
 bool Player::IsValidShipPositionOnMap(const Point& head, const Point& tail)

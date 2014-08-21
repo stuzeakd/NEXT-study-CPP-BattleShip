@@ -54,51 +54,76 @@ bool Utility::IsValidNumCol(char c){
 }
 bool Utility::IsUncrossedLine(const Point& line1pos1, const Point& line1pos2, const Point& line2pos1, const Point& line2pos2)
 {
-	bool isLine1Vertical = line1pos1.GetX() == line1pos2.GetX();
-	bool isLine2Vertical = line2pos1.GetX() == line2pos2.GetX();
-	bool isLine1Horizontal = line1pos1.GetY() == line1pos2.GetY();
-	bool isLine2Horizontal = line2pos1.GetY() == line2pos2.GetY();
-	//Wrong input check.
+	//Wrong input check. 
+	//it is not line.
+	if (line1pos1 == line1pos2 || line2pos1 == line2pos2) return false;
 
-	//They're Not a Line but just a Point. 
-	if ((isLine1Vertical && isLine1Horizontal) || (isLine2Vertical && isLine2Horizontal)) return false; 
-	//Line is tilted
-	else if (!(isLine1Vertical || isLine1Horizontal) || !(isLine2Vertical || isLine2Horizontal)) return false;
-	
-	else if (isLine1Horizontal && isLine2Horizontal)
-	{
-		if (line1pos1.GetY() != line2pos1.GetY()) return true; //Lines are parallel
-		else return false; //Lines are same.
-	}
-	else if (isLine1Vertical && isLine2Vertical)
-	{
-		if (line1pos1.GetX() != line2pos1.GetX()) return true; //Lines are parallel
-		else return false; //Lines are same.
-	}
+	int line1MinX = line1pos1.GetX() < line1pos2.GetX() ? line1pos1.GetX() : line1pos2.GetX();
+	int line1MaxX = line1pos1.GetX() > line1pos2.GetX() ? line1pos1.GetX() : line1pos2.GetX();
+	int line1MinY = line1pos1.GetY() < line1pos2.GetY() ? line1pos1.GetY() : line1pos2.GetY();
+	int line1MaxY = line1pos1.GetY() > line1pos2.GetY() ? line1pos1.GetY() : line1pos2.GetY();
 
-	else if (isLine1Vertical && isLine2Horizontal)
-	{
-		if (line1pos1.GetX() > line2pos1.GetX() && line1pos1.GetX() > line2pos2.GetX()) return true;
-		else if (line1pos1.GetX() < line2pos1.GetX() && line1pos1.GetX() < line2pos2.GetX()) return true;
-		else
-		{
-			if (line1pos1.GetY() > line2pos1.GetY() && line1pos2.GetY() > line2pos1.GetY()) return true;
-			else if (line1pos1.GetY() < line2pos1.GetY() && line1pos2.GetY() < line2pos1.GetY()) return true;
-			else return false;
-		}
-	}
-	else if (isLine1Horizontal && isLine2Vertical)
-	{
-		if (line1pos1.GetY() > line2pos1.GetY() && line1pos1.GetY() > line2pos2.GetY()) return true;
-		else if (line1pos1.GetY() < line2pos1.GetY() && line1pos1.GetY() < line2pos2.GetY()) return true;
-		else
-		{
-			if (line1pos1.GetX() > line2pos1.GetX() && line1pos2.GetX() > line2pos1.GetX()) return true;
-			else if (line1pos1.GetX() < line2pos1.GetX() && line1pos2.GetX() < line2pos1.GetX()) return true;
-			else return false;
-		}
-	}
-	else printf("unexpected err");
+	//line is tilted.
+	if ((line1MinX != line1MaxX) && (line1MinY != line1MinY)) return false;
+
+	int line2MinX = line2pos1.GetX() < line2pos2.GetX() ? line2pos1.GetX() : line2pos2.GetX();
+	int line2MaxX = line2pos1.GetX() > line2pos2.GetX() ? line2pos1.GetX() : line2pos2.GetX();
+	int line2MinY = line2pos1.GetY() < line2pos2.GetY() ? line2pos1.GetY() : line2pos2.GetY();
+	int line2MaxY = line2pos1.GetY() > line2pos2.GetY() ? line2pos1.GetY() : line2pos2.GetY();
+
+	//line is tilted.
+	if ((line2MinX != line2MaxX) && (line2MinY != line2MinY)) return false;
+
+	if (line1MinX > line2MinX && line1MinX > line2MaxX) return true;
+	else if (line1MaxX < line2MinX && line1MaxX < line2MaxX) return true;
+	else if (line1MinY > line2MinY && line1MinY > line2MaxY) return true;
+	else if (line1MaxY < line2MinY && line1MaxY < line2MaxY) return true;
+	else return false;
+
+	//bool isLine1Vertical = line1pos1.GetX() == line1pos2.GetX();
+	//bool isLine2Vertical = line2pos1.GetX() == line2pos2.GetX();
+	//bool isLine1Horizontal = line1pos1.GetY() == line1pos2.GetY();
+	//bool isLine2Horizontal = line2pos1.GetY() == line2pos2.GetY();
+
+	////They're Not a Line but just a Point. 
+	//if ((isLine1Vertical && isLine1Horizontal) || (isLine2Vertical && isLine2Horizontal)) return false; 
+	////Line is tilted
+	//else if (!(isLine1Vertical || isLine1Horizontal) || !(isLine2Vertical || isLine2Horizontal)) return false;
+	//
+	//else if (isLine1Horizontal && isLine2Horizontal)
+	//{
+	//	if (line1pos1.GetY() != line2pos1.GetY()) return true; //Lines are parallel
+	//	else return false; //Lines are same.
+	//}
+	//else if (isLine1Vertical && isLine2Vertical)
+	//{
+	//	if (line1pos1.GetX() != line2pos1.GetX()) return true; //Lines are parallel
+	//	else return false; //Lines are same.
+	//}
+
+	//else if (isLine1Vertical && isLine2Horizontal)
+	//{
+	//	if (line1pos1.GetX() > line2pos1.GetX() && line1pos1.GetX() > line2pos2.GetX()) return true;
+	//	else if (line1pos1.GetX() < line2pos1.GetX() && line1pos1.GetX() < line2pos2.GetX()) return true;
+	//	else
+	//	{
+	//		if (line1pos1.GetY() > line2pos1.GetY() && line1pos2.GetY() > line2pos1.GetY()) return true;
+	//		else if (line1pos1.GetY() < line2pos1.GetY() && line1pos2.GetY() < line2pos1.GetY()) return true;
+	//		else return false;
+	//	}
+	//}
+	//else if (isLine1Horizontal && isLine2Vertical)
+	//{
+	//	if (line1pos1.GetY() > line2pos1.GetY() && line1pos1.GetY() > line2pos2.GetY()) return true;
+	//	else if (line1pos1.GetY() < line2pos1.GetY() && line1pos1.GetY() < line2pos2.GetY()) return true;
+	//	else
+	//	{
+	//		if (line1pos1.GetX() > line2pos1.GetX() && line1pos2.GetX() > line2pos1.GetX()) return true;
+	//		else if (line1pos1.GetX() < line2pos1.GetX() && line1pos2.GetX() < line2pos1.GetX()) return true;
+	//		else return false;
+	//	}
+	//}
+	//else printf("unexpected err");
 }
 
 char Utility::LowerToUpper(char c)

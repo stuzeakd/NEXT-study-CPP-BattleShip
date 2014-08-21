@@ -28,24 +28,24 @@ public:
 
 	int					GetHP();
 	std::vector<Ship*>	GetShips(){ return m_MyShips; }
-	Map					GetMap(){ return m_MyMap; }
+	Map					GetMap(){ return *m_MyMap; }
 	std::string			GetPlayerName(){ return m_PlayerName; }
 	void				SetPlayerName(std::string name){ m_PlayerName = name; }
 	void				SetShipOnMyMap(Ship& ship);
+	void				SetShipOnEnemyMap(Ship& ship);
 	
 protected:
+	void			SetShipOnMap(Ship& ship, Map* map);
 	bool			IsValidAttackPos(Point pos);
-	//I'm hungry.
 	bool			IsValidShipPositionOnMap(const Point& head, const Point& tail);
 	void			CreateShips();
 	
 	std::string		m_PlayerName;
 	EPlayer::Type	m_PlayerType;
 	Messages*		m_Msgs;
-	Map				m_MyMap;
-	Map				m_EnemyMap;
+	Map*			m_MyMap;
+	Map*			m_EnemyMap;
 	std::vector<Ship*> m_MyShips;
 	std::vector<Ship*> m_EnemyShips;
-	//I'm hungry.
 };
 

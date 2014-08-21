@@ -181,7 +181,7 @@ void GameUIIngame::DrawEnemyShipsP2(std::vector<Ship*>& ships)
 {
 	DrawShips(ships, m_PosEnemyShipsP2);
 }
-void GameUIIngame::DrawMap(Map& map, const Point& stdPos)
+void GameUIIngame::DrawMap(Map* map, const Point& stdPos)
 {
 	Point pos;
 	char c;
@@ -212,7 +212,7 @@ void GameUIIngame::DrawMap(Map& map, const Point& stdPos)
 		for (int j = 0; j < MAP_COL; ++j)
 		{
 			ConsoleControl::Instance().Gotoxy(pos.GetX() + j * 2, pos.GetY() + i);
-			DrawTile(map.GetTile(i, j));
+			DrawTile(map->GetTile(i, j));
 		}
 	}
 }
@@ -249,19 +249,19 @@ void GameUIIngame::DrawTile(Tile& tile)
 	ConsoleControl::Instance().SetColor(m_ColorNormal);
 }
 
-void GameUIIngame::DrawMyMap(Map& map)
+void GameUIIngame::DrawMyMap(Map* map)
 {
 	DrawMap(map, m_PosMyMap);
 }
-void GameUIIngame::DrawEnemyMap(Map& map)
+void GameUIIngame::DrawEnemyMap(Map* map)
 {
 	DrawMap(map, m_PosEnemyMap);
 }
-void GameUIIngame::DrawMyMapP2(Map& map)
+void GameUIIngame::DrawMyMapP2(Map* map)
 {
 	DrawMap(map, m_PosMyMapP2);
 }
-void GameUIIngame::DrawEnemyMapP2(Map& map)
+void GameUIIngame::DrawEnemyMapP2(Map* map)
 {
 	DrawMap(map, m_PosEnemyMapP2);
 }

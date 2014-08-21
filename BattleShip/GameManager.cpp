@@ -40,11 +40,13 @@ void GameManager::GameInit()
 	for (auto ship : m_P1Data.player->GetShips())
 	{
 		Ship *tmpShip = ShipFactory::Instance()->GenerateShip(ship->GetType(), ship->GetID());
+		*tmpShip = *ship;
 		m_P1Data.ships.push_back(tmpShip);
 	}
 	for (auto ship : m_P2Data.player->GetShips())
 	{
 		Ship *tmpShip = ShipFactory::Instance()->GenerateShip(ship->GetType(), ship->GetID());
+		*tmpShip = *ship;
 		m_P2Data.ships.push_back(tmpShip);
 	}
 
