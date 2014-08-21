@@ -27,7 +27,7 @@ public:
 	void GameInit();
 	void GameStart();
 	bool IsTimeToQuit(){ return (m_P1Data.player->GetHP() == 0) || (m_P2Data.player->GetHP() == 0); }
-	void Draw();
+	void Draw() const;
 	Tile HitCheck(const Point& pos);
 	void Update(Tile &tile);
 	void SwapAttDef();

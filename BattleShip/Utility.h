@@ -13,16 +13,14 @@ protected:
 
 public:
 	std::string GetInput(void);
-	Point StringToPoint(std::string &rc);
-	bool IsValidRC(std::string &rc);
-	bool IsValidLowerRow(char c);
-	bool IsValidUpperRow(char c);
-	bool IsValidNumCol(char c);
-	bool HaveSameX(Point& pos1, Point& pos2){ return pos1.GetX() == pos2.GetX(); }
-	bool HaveSameY(Point& pos1, Point& pos2){ return pos1.GetY() == pos2.GetY(); }
-	bool IsUncrossedLine(const Point& line1pos1, const Point& line1pos2, const Point& line2pos1, const Point& line2pos2);
-	char Utility::LowerToUpper(char c);
-	char RowOfPoint(Point pos);
-	char ColOfPoint(Point pos);
+	Point	StringToPoint(const std::string &rc) const;
+	bool	IsValidRC(const std::string &rc) const;
+	bool	IsValidLowerRow(char c) const;
+	bool	IsValidUpperRow(char c) const;
+	bool	IsValidNumCol(char c) const;
+	bool	IsUncrossedLine(const Point& line1pos1, const Point& line1pos2, const Point& line2pos1, const Point& line2pos2) const;
+	char	Utility::LowerToUpper(char c) const;
+	char	RowOfPoint(const Point& pos) const;
+	char	ColOfPoint(const Point& pos) const;
 };
 

@@ -10,11 +10,11 @@ public:
 	~Map();
 	Map(const Map& src);
 public:
-	void Draw();
-	Tile GetTile(int row, int col);
-	Tile GetTile(Point pos);
-	void SetTile(Tile tile);
-	void UpdateTile(Tile tile);
+	Map& operator=(const Map& src);
+	Tile GetTile(int row, int col) const;
+	Tile GetTile(const Point& pos) const;
+	void SetTile(const Tile& tile);
+	void UpdateTile(const Tile& tile);
 
 private:
 	void Create();

@@ -19,16 +19,16 @@ public:
 	Tile(const Tile & src);
 
 public:
-	void Draw();
 	void SetID(int id){ m_ShipId = id; }
 	void SetPoint(int x, int y);
-	void SetPoint(Point pos);
-	void SetTileState(ETile::State state);
-	void SetShipType(EShip::Type type);
-	Point			GetPoint();
-	EShip::Type		GetShipType()	{ return m_ShipType; }
-	ETile::State	GetTileState()	{ return m_TileState; }
-	int				GetShipID()		{ return m_ShipId; }
+	void SetPoint(const Point& pos);
+	void SetTileState(const ETile::State& state);
+	void SetShipType(const EShip::Type& type);
+
+	Point			GetPoint()		const;
+	EShip::Type		GetShipType()	const { return m_ShipType; }
+	ETile::State	GetTileState()	const { return m_TileState; }
+	int				GetShipID()		const { return m_ShipId; }
 
 private:
 	int m_ShipId;

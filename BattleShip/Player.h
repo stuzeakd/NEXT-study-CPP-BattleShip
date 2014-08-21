@@ -21,23 +21,25 @@ public:
 	virtual Point		MakeShipPos() = 0;
 	virtual void		Render() = 0;
 
-	virtual void		UpdateTileOnMyMap(Tile& tile);
-	virtual void		UpdateTileOnEnemyMap(Tile& tile);
-	virtual void		UpdateShipOnMyShips(Ship& ship);
-	virtual void		UpdateShipOnEnemyShips(Ship& ship);
+	virtual void		UpdateTileOnMyMap(const Tile& tile);
+	virtual void		UpdateTileOnEnemyMap(const Tile& tile);
+	virtual void		UpdateShipOnMyShips(const Ship& ship);
+	virtual void		UpdateShipOnEnemyShips(const Ship& ship);
 
-	int					GetHP();
-	std::vector<Ship*>	GetShips(){ return m_MyShips; }
-	Map					GetMap(){ return *m_MyMap; }
-	std::string			GetPlayerName(){ return m_PlayerName; }
-	void				SetPlayerName(std::string name){ m_PlayerName = name; }
-	void				SetShipOnMyMap(Ship& ship);
-	void				SetShipOnEnemyMap(Ship& ship);
+	int							GetHP() const;
+	std::vector<Ship*>			GetShips() const{ return m_MyShips; }
+	Map							GetMap() const{ return *m_MyMap; }
+	std::string					GetPlayerName() const{ return m_PlayerName; }
+	void						SetPlayerName(std::string name){ m_PlayerName = name; }
+	void						SetShipOnMyMap(const Ship& ship);
+	void						SetShipOnEnemyMap(const Ship& ship);
 	
 protected:
-	void			SetShipOnMap(Ship& ship, Map* map);
-	bool			IsValidAttackPos(Point pos);
-	bool			IsValidShipPositionOnMap(const Point& head, const Point& tail);
+	void			SetShipOnMap(const Ship& ship, Map* map);
+
+	bool			IsValidPosRange(const Point& pos) const;
+	bool			IsValidAttackPos(const Point& pos) const;
+	bool			IsValidShipPositionOnMap(const Point& head, const Point& tail) const;
 	void			CreateShips();
 	
 	std::string		m_PlayerName;

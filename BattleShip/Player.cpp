@@ -12,6 +12,16 @@ Player::~Player()
 	delete m_Msgs;
 	delete m_MyMap;
 	delete m_EnemyMap;
+	for (std::vector<Ship*>::iterator iter = m_MyShips.begin(); iter != m_MyShips.end();)
+	{
+		delete *iter;
+		iter = m_MyShips.erase(iter);
+	}
+	for (std::vector<Ship*>::iterator iter = m_EnemyShips.begin(); iter != m_EnemyShips.end();)
+	{
+		delete *iter;
+		iter = m_EnemyShips.erase(iter);
+	}
 }
 Player::Player(EPlayer::Type type){
 }
@@ -24,7 +34,7 @@ void Player::Init()
 }
 void Player::CreateShips()
 {
-	//##id is same with vector position.##
+	//##important! id is same with vector position.##
 	for (int id = 0; id < _countof(shipRule); id++){
 		m_MyShips.push_back(ShipFactory::Instance() -> GenerateShip(shipRule[id], id));
 	}
@@ -32,26 +42,20 @@ void Player::CreateShips()
 		m_EnemyShips.push_back(ShipFactory::Instance()->GenerateShip(shipRule[id], id));
 	}
 }
-//Update
-void Player::UpdateTileOnMyMap(Tile& tile)
+/*
+ * Update Functions
+ *
+ */
+void Player::UpdateTileOnMyMap(const Tile& tile)
 {
-	//if (tile.GetTileState == ETile::DESTROY)
-	//{
-	//	Ship *targetShip = m_MyShips.at(tile.GetShipID());
-	//	for (int i = 0; i < targetShip->GetLength(); ++i)
-	//	{
-	//		Tile tmpTile;
-	//		tmpTile.SetPoint(targetShip->GetPosition()[0]);
-	//		t
-	//	}
-	//}	
 	m_MyMap->UpdateTile(tile);
 }
-void Player::UpdateTileOnEnemyMap(Tile& tile)
+void Player::UpdateTileOnEnemyMap(const Tile& tile)
 {
 	m_EnemyMap->SetTile(tile);
 }
-void Player::UpdateShipOnMyShips(Ship& ship)
+
+void Player::UpdateShipOnMyShips(const Ship& ship)
 {
 	if (ship.GetHP() > 0) m_MyShips.at(ship.GetID())->GiveDamage();
 	if (ship.GetHP() == 0){
@@ -59,13 +63,13 @@ void Player::UpdateShipOnMyShips(Ship& ship)
 		SetShipOnMyMap(ship);
 	}
 }
-void Player::UpdateShipOnEnemyShips(Ship& ship)
+void Player::UpdateShipOnEnemyShips(const Ship& ship)
 {
 	m_EnemyShips.at(ship.GetID())->Destroy();
 	SetShipOnEnemyMap(ship);
 }
 
-int Player::GetHP()
+int Player::GetHP() const
 {
 	int HP = 0;
 	for (auto ship : m_MyShips){
@@ -73,8 +77,12 @@ int Player::GetHP()
 	}
 	return HP;
 }
-void Player::SetShipOnMap(Ship& ship, Map* map)
+
+void Player::SetShipOnMap(const Ship& ship, Map* map)
 {
+	//NULL Pointer check
+	if (map == nullptr) return;
+
 	Point head = ship.GetHeadPos();
 	Point tail = ship.GetTailPos();
 	Tile tmpTile;
@@ -112,30 +120,36 @@ void Player::SetShipOnMap(Ship& ship, Map* map)
 	}
 	else printf("unexpected err");
 }
-void Player::SetShipOnMyMap(Ship& ship)
+void Player::SetShipOnMyMap(const Ship& ship)
 {
 	SetShipOnMap(ship, m_MyMap);
 }
-void Player::SetShipOnEnemyMap(Ship& ship)
+void Player::SetShipOnEnemyMap(const Ship& ship) 
 {
 	SetShipOnMap(ship, m_EnemyMap);
 }
-bool Player::IsValidAttackPos(Point pos)
+
+/*
+ * IsValid Functions 
+ *
+ */
+bool Player::IsValidAttackPos(const Point& pos) const
 {
+	//Point range check.
+	if (!IsValidPosRange(pos)) return false;
+
 	if ( m_EnemyMap->GetTile(pos).GetTileState() == ETile::NONE ) return true;
 	else return false;
 }
-bool Player::IsValidShipPositionOnMap(const Point& head, const Point& tail)
+bool Player::IsValidShipPositionOnMap(const Point& head, const Point& tail) const
 {
-	if ((0 > head.GetX() || head.GetX() >= MAP_ROW) ||
-		(0 > head.GetY() || head.GetY() >= MAP_COL)) return false;
-	if (0 > tail.GetX() || tail.GetX() >= MAP_ROW ||
-		0 > tail.GetY() || tail.GetY() >= MAP_COL) return false;
-	
-	bool isHorizontal = head.GetX() == tail.GetX();
+	//Point range check.
+	if (!IsValidPosRange(head)) return false;
+	if (!IsValidPosRange(tail)) return false;
+
 	for (auto ship : m_MyShips){
-		Point& shipHead = ship->GetHeadPos();
-		Point& shipTail = ship->GetTailPos();
+		const Point& shipHead = ship->GetHeadPos();
+		const Point& shipTail = ship->GetTailPos();
 		if ((shipHead.GetX() == -1) || (shipTail.GetX() == -1)) continue;
 		if (!Utility::Instance().IsUncrossedLine(head, tail, shipHead, shipTail))
 		{
@@ -143,4 +157,11 @@ bool Player::IsValidShipPositionOnMap(const Point& head, const Point& tail)
 		}
 	}
 	return true;
+}
+//Point range check.
+bool Player::IsValidPosRange(const Point& pos) const
+{
+	if ((0 <= pos.GetX() && pos.GetX() < MAP_ROW) &&
+		(0 <= pos.GetY() && pos.GetY() < MAP_COL)) return true;
+	else return false;
 }

@@ -35,7 +35,6 @@ void GameManager::GameInit()
 	m_P2Data.player->SetupShips();
 	m_P1Data.map = (m_P1Data.player)->GetMap();
 	m_P2Data.map = (m_P2Data.player)->GetMap();
-	//GameUIIngame::Instance().DrawEnemyMap((m_P1Data.player)->GetMap());
 
 	for (auto ship : m_P1Data.player->GetShips())
 	{
@@ -59,15 +58,13 @@ void GameManager::GameStart()
 	while (!IsTimeToQuit())
 	{
 		Point pos = (m_AttackerData->player)->Attack();
-		//getchar();
 		Tile m_TmpTile = HitCheck(pos);
-		//printf("%d, (%d %d)", m_TmpTile.GetTileState(), m_TmpTile.GetX(), m_TmpTile.GetY());
 		Update(m_TmpTile);
 		Draw();
 		SwapAttDef();
 	}
 }
-void GameManager::Draw()
+void GameManager::Draw() const
 {
 	ConsoleControl::Instance().Clear();
 	m_P1Data.player->Render();
