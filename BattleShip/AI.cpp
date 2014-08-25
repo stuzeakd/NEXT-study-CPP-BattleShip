@@ -4,6 +4,7 @@
 
 AI::AI()
 {
+	srand(time(NULL));
 	m_PlayerType = EPlayer::AI;
 }
 
@@ -13,22 +14,22 @@ AI::~AI()
 }
 void AI::Render()
 {
-	GameUIIngame::Instance().DrawMyShipsP2(m_MyShips);
-	GameUIIngame::Instance().DrawEnemyShipsP2(m_EnemyShips);
-	GameUIIngame::Instance().DrawMyMapP2(m_MyMap);
-	GameUIIngame::Instance().DrawEnemyMapP2(m_EnemyMap);
+	ConsoleControl::Instance().SetStdXY(0, 30);
+	GameUIIngame::Instance().DrawMyShips(m_MyShips);
+	GameUIIngame::Instance().DrawEnemyShips(m_EnemyShips);
+	GameUIIngame::Instance().DrawMyMap(m_MyMap);
+	GameUIIngame::Instance().DrawEnemyMap(m_EnemyMap);
 }
 void AI::SetupShips()
 {
 	UDLRRand UDLR;
 	Point head;
 	Point tail;
-	bool IsValidShipPos = true;
-	bool IsValidMapPos = true;
-	//	for (std::vector<Ship*>::iterator ship = m_MyShips.begin(); ship != m_MyShips.end(); ++ship)
+	//bool IsValidShipPos = false;
+	bool IsValidMapPos = false;
 	for (auto ship : m_MyShips)
 	{
-		while (true)
+		do
 		{
 			UDLR.Reset();
 			head = MakeShipPos();
@@ -57,8 +58,7 @@ void AI::SetupShips()
 				}
 				if (IsValidMapPos = IsValidShipPositionOnMap(head, tail)) break;
 			}
-			if (IsValidMapPos) break;
-		}
+		} while (!IsValidMapPos);
 		ship->SetPosition(head, tail);
 		SetShipOnMyMap(*ship);
 	}
@@ -74,7 +74,6 @@ Point AI::Attack()
 }
 Point AI::MakeShipPos()
 {
-	srand(time(NULL));
 	Point pos;
 	pos.SetX(rand() % MAP_ROW);
 	pos.SetY(rand() % MAP_COL);

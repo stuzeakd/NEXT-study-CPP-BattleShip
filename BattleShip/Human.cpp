@@ -4,6 +4,7 @@
 
 Human::Human()
 {
+	srand(time(NULL));
 	m_PlayerType = EPlayer::HUMAN;
 }
 Human::~Human()
@@ -11,18 +12,13 @@ Human::~Human()
 }
 void Human::Render()
 {
+	ConsoleControl::Instance().SetStdXY(0, 0);
 	GameUIIngame::Instance().DrawSystemMsgs(m_Msgs);
 	GameUIIngame::Instance().DrawMyShips(m_MyShips);
 	GameUIIngame::Instance().DrawEnemyShips(m_EnemyShips);
 	GameUIIngame::Instance().DrawMyMap(m_MyMap);
 	GameUIIngame::Instance().DrawEnemyMap(m_EnemyMap);
 }
-//void Human::PrintMyMap(){
-//	m_MyMap.Draw();
-//}
-//void Human::PrintEnemyMap(){
-//	m_EnemyMap.Draw();
-//}
 
 //void Human::SetupShips()
 //{
@@ -40,14 +36,14 @@ void Human::Render()
 //		tail = MakeShipPos();
 //		while (!(IsValidShipPos = ship->IsValidPosition(head, tail)) ||
 //			!(IsValidMapPos = IsValidShipPositionOnMap(head,tail)))
-//		{//I'm hungry.
+//		{
 //			if (!IsValidShipPos) GameUIIngame::Instance().DrawSystemMsgs(m_Msgs, MSG_SETUP_SHIP_MAKING_FAIL);
 //			if (!IsValidMapPos)	 GameUIIngame::Instance().DrawSystemMsgs(m_Msgs, MSG_SETUP_SHIP_ON_MAP_FAIL);
 //			GameUIIngame::Instance().DrawSystemMsgs(m_Msgs, MSG_INPUT_HEAD_POS);
 //			head = MakeShipPos();
 //			GameUIIngame::Instance().DrawSystemMsgs(m_Msgs, MSG_INPUT_TAIL_POS);
 //			tail = MakeShipPos();
-//		}//I'm hungry.
+//		}
 //		ship->SetPosition(head, tail);
 //		GameUIIngame::Instance().DrawSystemMsgs(m_Msgs ,ship->GetName() + "fin"); //
 //		SetShipOnMyMap(*ship);
@@ -112,12 +108,12 @@ void Human::SetupShips()
 	UDLRRand UDLR;
 	Point head;
 	Point tail;
-	bool IsValidShipPos = true;
-	bool IsValidMapPos = true;
+	bool IsValidShipPos = false;
+	bool IsValidMapPos = false;
 	//	for (std::vector<Ship*>::iterator ship = m_MyShips.begin(); ship != m_MyShips.end(); ++ship)
 	for (auto ship : m_MyShips)
 	{
-		while (true)
+		do
 		{
 			UDLR.Reset();
 			head = MakeShipPosRand();
@@ -146,16 +142,14 @@ void Human::SetupShips()
 				}
 				if (IsValidMapPos = IsValidShipPositionOnMap(head, tail)) break;
 			}
-			if (IsValidMapPos) break;
-		}
+		} while (!IsValidMapPos);
 		ship->SetPosition(head, tail);
-		SetShipOnMyMap(*ship);
+		SetShipOnMyMap(*ship); //Danger. assign to const Ship&
 		GameUIIngame::Instance().DrawMyMap(m_MyMap);
 	}
 }
 Point Human::MakeShipPosRand()
 {
-	srand(time(NULL));
 	Point pos;
 	pos.SetX(rand() % MAP_ROW);
 	pos.SetY(rand() % MAP_COL);

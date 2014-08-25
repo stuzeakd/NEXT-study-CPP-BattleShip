@@ -11,20 +11,53 @@ ConsoleControl& ConsoleControl::Instance()
 }
 ConsoleControl::ConsoleControl()
 {
+	m_StdPos.SetX(0);
+	m_StdPos.SetY(0);
 }
 
 
 ConsoleControl::~ConsoleControl()
 {
 }
+void ConsoleControl::SetTitle(const std::wstring& title)
+{
+	SetConsoleTitle(title.c_str());
+}
+void ConsoleControl::SetTitle(const std::string& title)
+{
+	int len;
+	int slength = (int)title.length() + 1;
+	len = MultiByteToWideChar(CP_ACP, 0, title.c_str(), slength, 0, 0);
+	wchar_t* buf = new wchar_t[len];
+	MultiByteToWideChar(CP_ACP, 0, title.c_str(), slength, buf, len);
+	std::wstring wTitle(buf);
+	delete[] buf;
+	SetTitle(wTitle);
+}
+void ConsoleControl::SetStdXY(int stdX, int stdY)
+{
+	m_StdPos.SetX(stdX);
+	m_StdPos.SetY(stdY);
+}
+void ConsoleControl::SetStdXY(Point stdPos)
+{
+	SetStdXY(stdPos);
+}
 void ConsoleControl::Gotoxy(int x, int y)
 {
-	COORD pos = { x, y };
+	COORD pos = { m_StdPos.GetX() + x, m_StdPos.GetY() + y };
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 void ConsoleControl::SetWindowSize(int width, int height)
 {
-
+	char widthC[8];
+	char heightC[8];
+	_itoa_s(width, widthC, 10);
+	_itoa_s(height, heightC, 10);
+	std::string widthCpp = widthC;
+	std::string heightCpp = heightC;
+	std::string result = "mode con:cols=" + widthCpp + " lines=" + heightCpp;
+	system(result.c_str());
 }
 void ConsoleControl::Gotoxy(Point pos)
 {
@@ -43,10 +76,10 @@ void ConsoleControl::SetColor(ColorSet consoleColor){
 void ConsoleControl::Clear(){
 	system("cls");
 }
-int ConsoleControl::CursorPosVerti(std::string cursor, Point stdPos, int range , int interval, int state){
+int ConsoleControl::CursorPosVerti(std::string cursor, Point startPos, int range , int interval, int state){
 	int opt = state;
 	char ch = 0;
-	Point pos = { stdPos.GetX(), stdPos.GetY() + state * interval };
+	Point pos = { startPos.GetX(), startPos.GetY() + state * interval };
 	while (ch != '\r'){
 		Gotoxy(pos);
 		printf("%s", cursor.c_str());
@@ -58,11 +91,11 @@ int ConsoleControl::CursorPosVerti(std::string cursor, Point stdPos, int range ,
 			Gotoxy(pos);		
 			printf("  ");
 		}
-		if (ch == 72 && pos.GetY() > stdPos.GetY()){
+		if (ch == 72 && pos.GetY() > startPos.GetY()){
 			pos.SetY(pos.GetY() - interval);
 			opt--;
 		}
-		else if (ch == 80 && pos.GetY() < stdPos.GetY() + (range - 1) * interval){
+		else if (ch == 80 && pos.GetY() < startPos.GetY() + (range - 1) * interval){
 			pos.SetY(pos.GetY() + interval);
 			opt++;
 		}

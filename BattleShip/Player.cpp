@@ -17,13 +17,13 @@ Player::~Player()
 		delete *iter;
 		iter = m_MyShips.erase(iter);
 	}
+	m_MyShips.clear();
 	for (std::vector<Ship*>::iterator iter = m_EnemyShips.begin(); iter != m_EnemyShips.end();)
 	{
 		delete *iter;
 		iter = m_EnemyShips.erase(iter);
 	}
-}
-Player::Player(EPlayer::Type type){
+	m_EnemyShips.clear();
 }
 void Player::Init()
 {
@@ -36,10 +36,10 @@ void Player::CreateShips()
 {
 	//##important! id is same with vector position.##
 	for (int id = 0; id < _countof(shipRule); id++){
-		m_MyShips.push_back(ShipFactory::Instance() -> GenerateShip(shipRule[id], id));
+		m_MyShips.push_back(ShipFactory::Instance().GenerateShip(shipRule[id], id));
 	}
 	for (int id = 0; id < _countof(shipRule); id++){
-		m_EnemyShips.push_back(ShipFactory::Instance()->GenerateShip(shipRule[id], id));
+		m_EnemyShips.push_back(ShipFactory::Instance().GenerateShip(shipRule[id], id));
 	}
 }
 /*
@@ -68,7 +68,10 @@ void Player::UpdateShipOnEnemyShips(const Ship& ship)
 	m_EnemyShips.at(ship.GetID())->Destroy();
 	SetShipOnEnemyMap(ship);
 }
-
+/*
+ * Get Function
+ *
+ */
 int Player::GetHP() const
 {
 	int HP = 0;

@@ -54,8 +54,8 @@ bool Utility::IsValidNumCol(char c) const
 bool Utility::IsUncrossedLine(const Point& line1pos1, const Point& line1pos2, const Point& line2pos1, const Point& line2pos2) const
 {
 	//Wrong input check. 
-	//it is not line.
-	if (line1pos1 == line1pos2 || line2pos1 == line2pos2) return false;
+	////it is not line.
+	//if (line1pos1 == line1pos2 || line2pos1 == line2pos2) return false;
 
 	int line1MinX = line1pos1.GetX() < line1pos2.GetX() ? line1pos1.GetX() : line1pos2.GetX();
 	int line1MaxX = line1pos1.GetX() > line1pos2.GetX() ? line1pos1.GetX() : line1pos2.GetX();

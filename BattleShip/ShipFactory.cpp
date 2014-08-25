@@ -3,11 +3,11 @@
 
 ShipFactory* ShipFactory::m_Instance = nullptr;
 
-ShipFactory* ShipFactory::Instance(){
+ShipFactory& ShipFactory::Instance(){
 	if (m_Instance == nullptr){
 		m_Instance = new ShipFactory();
 	}
-	return m_Instance;
+	return *m_Instance;
 }
 
 ShipFactory::ShipFactory()

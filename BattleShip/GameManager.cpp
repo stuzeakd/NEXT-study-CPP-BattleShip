@@ -15,6 +15,20 @@ GameManager::~GameManager()
 {
 	delete m_P1Data.player;
 	delete m_P2Data.player;
+	for (std::vector<Ship*>::iterator iter = m_P1Data.ships.begin(); iter != m_P1Data.ships.end();)
+	{
+		delete *iter;
+		iter = m_P1Data.ships.erase(iter);
+	}
+	m_P1Data.ships.clear();
+	for (std::vector<Ship*>::iterator iter = m_P2Data.ships.begin(); iter != m_P2Data.ships.end();)
+	{
+		delete *iter;
+		iter = m_P2Data.ships.erase(iter);
+	}
+	m_P2Data.ships.clear();
+	m_P1Data.map.~Map();
+	m_P2Data.map.~Map();
 }
 void GameManager::Run()
 {
@@ -38,13 +52,13 @@ void GameManager::GameInit()
 
 	for (auto ship : m_P1Data.player->GetShips())
 	{
-		Ship *tmpShip = ShipFactory::Instance()->GenerateShip(ship->GetType(), ship->GetID());
+		Ship *tmpShip = ShipFactory::Instance().GenerateShip(ship->GetType(), ship->GetID());
 		*tmpShip = *ship;
 		m_P1Data.ships.push_back(tmpShip);
 	}
 	for (auto ship : m_P2Data.player->GetShips())
 	{
-		Ship *tmpShip = ShipFactory::Instance()->GenerateShip(ship->GetType(), ship->GetID());
+		Ship *tmpShip = ShipFactory::Instance().GenerateShip(ship->GetType(), ship->GetID());
 		*tmpShip = *ship;
 		m_P2Data.ships.push_back(tmpShip);
 	}
@@ -67,7 +81,7 @@ void GameManager::GameStart()
 void GameManager::Draw() const
 {
 	ConsoleControl::Instance().Clear();
-	m_P1Data.player->Render();
+	//m_P1Data.player->Render();
 	m_P2Data.player->Render();
 }
 Tile GameManager::HitCheck(const Point& pos)
@@ -94,7 +108,7 @@ Tile GameManager::HitCheck(const Point& pos)
 	}
 	return targetTile;
 }
-void GameManager::Update(Tile& resultTile)
+void GameManager::Update(const Tile& resultTile)
 {
 	int targetShipID = resultTile.GetShipID();
 

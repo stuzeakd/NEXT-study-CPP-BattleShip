@@ -12,7 +12,7 @@
 class ShipFactory
 {
 public:
-	static ShipFactory* Instance();
+	static ShipFactory& Instance();
 	~ShipFactory();
 
 protected:

@@ -7,9 +7,9 @@ class AI :
 public:
 	AI();
 	~AI();
-	void Render();
-	void SetupShips();
-	Point MakeShipPos();
-	Point Attack();
+	void	Render();
+	void	SetupShips();
+	Point	MakeShipPos();
+	Point	Attack();
 };
 
